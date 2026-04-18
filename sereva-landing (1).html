@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sereva — Burnout Prevention for Healthcare Workers</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream: #FAF7F2;
+      --warm-white: #FDF9F4;
+      --terracotta: #C97B5A;
+      --terracotta-light: #E8A882;
+      --sage: #7A9E87;
+      --sage-light: #A8C4B0;
+      --deep: #2C3830;
+      --mid: #5C6B62;
+      --soft: #9BA89F;
+      --blush: #F2E4D8;
+      --blush-deep: #E8D0BC;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--deep);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.4rem 4rem;
+      background: rgba(250, 247, 242, 0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(201, 123, 90, 0.12);
+    }
+
+    .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.9rem;
+      font-weight: 600;
+      color: var(--deep);
+      letter-spacing: 0.04em;
+    }
+
+    .logo span { color: var(--terracotta); }
+
+    .lang-toggle {
+      display: flex;
+      gap: 0.2rem;
+      background: var(--blush);
+      border-radius: 100px;
+      padding: 0.3rem;
+    }
+
+    .lang-btn {
+      border: none;
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--mid);
+      padding: 0.35rem 0.9rem;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      letter-spacing: 0.05em;
+    }
+
+    .lang-btn.active {
+      background: var(--terracotta);
+      color: white;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 8rem 4rem 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 70% at 80% 30%, rgba(201, 123, 90, 0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 20% 80%, rgba(122, 158, 135, 0.1) 0%, transparent 70%);
+    }
+
+    .hero-orb {
+      position: absolute;
+      right: -8rem;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 55vw;
+      height: 55vw;
+      max-width: 700px;
+      max-height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 40%,
+        rgba(232, 168, 130, 0.22) 0%,
+        rgba(168, 196, 176, 0.15) 50%,
+        transparent 70%);
+      border: 1px solid rgba(201, 123, 90, 0.1);
+      animation: breathe 8s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%, 100% { transform: translateY(-50%) scale(1); opacity: 0.7; }
+      50% { transform: translateY(-52%) scale(1.03); opacity: 1; }
+    }
+
+    .hero-content {
+      max-width: 620px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.2s forwards;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 28px;
+      height: 1px;
+      background: var(--terracotta);
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 5.5vw, 4.8rem);
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--deep);
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.35s forwards;
+    }
+
+    .hero-title em { font-style: italic; color: var(--terracotta); }
+
+    .hero-sub {
+      font-size: 1.05rem;
+      font-weight: 300;
+      line-height: 1.75;
+      color: var(--mid);
+      max-width: 480px;
+      margin-bottom: 2.8rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.5s forwards;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--blush);
+      border: 1px solid rgba(201,123,90,0.2);
+      color: var(--terracotta);
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 0.7rem 1.4rem;
+      border-radius: 100px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.65s forwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── STATS ── */
+    .stats {
+      background: var(--deep);
+      padding: 3rem 4rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+    }
+
+    .stat {
+      text-align: center;
+      border-right: 1px solid rgba(255,255,255,0.08);
+      padding: 0.5rem 2rem;
+    }
+
+    .stat:last-child { border-right: none; }
+
+    .stat-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      font-weight: 300;
+      color: var(--terracotta-light);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      font-weight: 400;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.5;
+      letter-spacing: 0.03em;
+    }
+
+    /* ── SHARED ── */
+    section { padding: 6rem 4rem; }
+
+    .section-tag {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .section-tag::before {
+      content: '';
+      display: block;
+      width: 20px;
+      height: 1px;
+      background: var(--sage);
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 300;
+      line-height: 1.2;
+      color: var(--deep);
+      margin-bottom: 1.2rem;
+    }
+
+    .section-title em { font-style: italic; color: var(--terracotta); }
+
+    .section-body {
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.8;
+      color: var(--mid);
+      max-width: 560px;
+    }
+
+    /* ── PROBLEM ── */
+    .problem {
+      background: var(--warm-white);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .problem-visual { position: relative; height: 380px; }
+
+    .burnout-card {
+      background: white;
+      border-radius: 20px;
+      padding: 1.8rem;
+      box-shadow: 0 8px 40px rgba(44,56,48,0.07);
+      position: absolute;
+    }
+
+    .burnout-card.main { left: 0; top: 0; width: 280px; }
+    .burnout-card.secondary { right: 0; bottom: 0; width: 240px; background: var(--blush); }
+
+    .card-label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--soft);
+      margin-bottom: 1rem;
+    }
+
+    .risk-bar-wrap { margin-bottom: 0.8rem; }
+
+    .risk-bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--mid);
+      margin-bottom: 0.3rem;
+    }
+
+    .risk-bar {
+      height: 6px;
+      background: var(--blush-deep);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+
+    .risk-fill { height: 100%; border-radius: 100px; background: var(--terracotta); }
+    .risk-fill.amber { background: #E8A82A; }
+    .risk-fill.green { background: var(--sage); }
+
+    .alert-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .alert-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--terracotta);
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+
+    .alert-text { font-size: 0.82rem; color: var(--mid); line-height: 1.5; }
+
+    /* ── SOLUTION ── */
+    .solution { background: var(--cream); }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 3.5rem;
+    }
+
+    .feature {
+      background: white;
+      border-radius: 20px;
+      padding: 2.2rem;
+      border: 1px solid rgba(201,123,90,0.08);
+      transition: all 0.3s ease;
+    }
+
+    .feature:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 48px rgba(44,56,48,0.08);
+      border-color: rgba(201,123,90,0.2);
+    }
+
+    .feature-icon {
+      width: 48px; height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .feature-icon.terra { background: rgba(201,123,90,0.1); }
+    .feature-icon.sage { background: rgba(122,158,135,0.1); }
+    .feature-icon.blush { background: rgba(242,228,216,0.8); }
+
+    .feature-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--deep);
+      margin-bottom: 0.7rem;
+    }
+
+    .feature-desc {
+      font-size: 0.88rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--mid);
+    }
+
+    /* ── WHO ── */
+    .who {
+      background: var(--blush);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .persona-cards { display: flex; flex-direction: column; gap: 1.2rem; }
+
+    .persona {
+      background: white;
+      border-radius: 16px;
+      padding: 1.6rem;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      border: 1px solid rgba(201,123,90,0.1);
+    }
+
+    .persona-avatar {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+
+    .persona-name {
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: var(--deep);
+      margin-bottom: 0.2rem;
+    }
+
+    .persona-role {
+      font-size: 0.8rem;
+      color: var(--soft);
+      font-weight: 300;
+    }
+
+    /* ── MISSION ── */
+    .mission {
+      background: var(--deep);
+      text-align: center;
+      padding: 7rem 4rem;
+    }
+
+    .mission-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 3.5vw, 3rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--blush);
+      max-width: 780px;
+      margin: 0 auto 2rem;
+      line-height: 1.4;
+    }
+
+    .mission-sub {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.4);
+      font-weight: 300;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--deep);
+      padding: 2rem 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: white;
+    }
+
+    .footer-logo span { color: var(--terracotta-light); }
+    .footer-copy { font-size: 0.75rem; color: rgba(255,255,255,0.3); font-weight: 300; }
+    .footer-sdg { font-size: 0.75rem; color: rgba(255,255,255,0.3); font-weight: 300; text-align: right; }
+
+    /* ── LANG ── */
+    [data-lang] { display: none; }
+    .lang-en [data-lang="en"] { display: block; }
+    .lang-fr [data-lang="fr"] { display: block; }
+    .lang-en [data-lang-inline="en"] { display: inline; }
+    .lang-fr [data-lang-inline="fr"] { display: inline; }
+    [data-lang-inline] { display: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .hero { padding: 7rem 1.5rem 4rem; }
+      .hero-orb { display: none; }
+      section { padding: 4rem 1.5rem; }
+      .stats { grid-template-columns: 1fr; padding: 2.5rem 1.5rem; }
+      .stat { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); padding: 1rem; }
+      .stat:last-child { border-bottom: none; }
+      .problem, .who { grid-template-columns: 1fr; gap: 3rem; }
+      .problem-visual { height: 280px; }
+      .burnout-card.main { width: 220px; }
+      .burnout-card.secondary { width: 190px; }
+      .features { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+      .footer-sdg { text-align: center; }
+    }
+  </style>
+</head>
+<body class="lang-en">
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Ser<span>e</span>va</div>
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('fr')">FR</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-orb"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span data-lang-inline="en">Healthcare Workforce Wellbeing</span>
+      <span data-lang-inline="fr">Bien-être des effectifs de santé</span>
+    </div>
+    <h1 class="hero-title">
+      <span data-lang="en">Catch burnout <em>before</em> it catches your team.</span>
+      <span data-lang="fr">Détectez l'épuisement <em>avant</em> qu'il n'atteigne votre équipe.</span>
+    </h1>
+    <p class="hero-sub">
+      <span data-lang-inline="en">Sereva is an AI-powered early warning platform that helps healthcare HR teams identify burnout risk signals — and act before losing their best people.</span>
+      <span data-lang-inline="fr">Sereva est une plateforme d'alerte précoce propulsée par l'IA qui aide les équipes RH en santé à détecter les signaux d'épuisement — et à agir avant de perdre leurs meilleurs talents.</span>
+    </p>
+    <div class="hero-badge">
+      🌱
+      <span data-lang-inline="en">Early-stage startup · Montreal, Quebec</span>
+      <span data-lang-inline="fr">Startup en démarrage · Montréal, Québec</span>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat">
+    <div class="stat-number">55%</div>
+    <div class="stat-label" data-lang="en">of healthcare workers are considering leaving their jobs</div>
+    <div class="stat-label" data-lang="fr">des travailleurs de la santé envisagent de quitter leur emploi</div>
+  </div>
+  <div class="stat">
+    <div class="stat-number">700K</div>
+    <div class="stat-label" data-lang="en">projected healthcare worker shortage in Canada by 2037</div>
+    <div class="stat-label" data-lang="fr">pénurie projetée de professionnels de santé au Canada d'ici 2037</div>
+  </div>
+  <div class="stat">
+    <div class="stat-number">0</div>
+    <div class="stat-label" data-lang="en">dedicated bilingual burnout prevention platforms built for Quebec's health system</div>
+    <div class="stat-label" data-lang="fr">plateformes bilingues de prévention de l'épuisement conçues pour le réseau de santé du Québec</div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section class="problem">
+  <div class="problem-visual">
+    <div class="burnout-card main">
+      <div class="card-label" data-lang="en">Team Risk Overview</div>
+      <div class="card-label" data-lang="fr">Aperçu des risques d'équipe</div>
+      <div class="risk-bar-wrap">
+        <div class="risk-bar-label">
+          <span data-lang-inline="en">ICU — Night Shift</span>
+          <span data-lang-inline="fr">USI — Nuit</span>
+          <span>78%</span>
+        </div>
+        <div class="risk-bar"><div class="risk-fill" style="width:78%"></div></div>
+      </div>
+      <div class="risk-bar-wrap">
+        <div class="risk-bar-label">
+          <span data-lang-inline="en">ER — Day Shift</span>
+          <span data-lang-inline="fr">Urgence — Jour</span>
+          <span>54%</span>
+        </div>
+        <div class="risk-bar"><div class="risk-fill amber" style="width:54%"></div></div>
+      </div>
+      <div class="risk-bar-wrap">
+        <div class="risk-bar-label">
+          <span data-lang-inline="en">Oncology</span>
+          <span data-lang-inline="fr">Oncologie</span>
+          <span>31%</span>
+        </div>
+        <div class="risk-bar"><div class="risk-fill green" style="width:31%"></div></div>
+      </div>
+    </div>
+    <div class="burnout-card secondary">
+      <div class="card-label" data-lang="en">Early Signals Detected</div>
+      <div class="card-label" data-lang="fr">Signaux précoces détectés</div>
+      <div class="alert-item">
+        <div class="alert-dot"></div>
+        <div class="alert-text" data-lang="en">↑ 22% overtime last 3 weeks</div>
+        <div class="alert-text" data-lang="fr">↑ 22% d'heures supp. sur 3 semaines</div>
+      </div>
+      <div class="alert-item">
+        <div class="alert-dot" style="background:var(--sage)"></div>
+        <div class="alert-text" data-lang="en">3 missed check-ins this month</div>
+        <div class="alert-text" data-lang="fr">3 bilans manqués ce mois-ci</div>
+      </div>
+      <div class="alert-item">
+        <div class="alert-dot" style="background:#E8A82A"></div>
+        <div class="alert-text" data-lang="en">Absenteeism up in dept. 4B</div>
+        <div class="alert-text" data-lang="fr">Absentéisme en hausse, dépt. 4B</div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="section-tag" data-lang="en">The Problem</div>
+    <div class="section-tag" data-lang="fr">Le problème</div>
+    <h2 class="section-title">
+      <span data-lang="en">Burnout builds in silence. HR only hears about it <em>too late.</em></span>
+      <span data-lang="fr">L'épuisement s'installe en silence. Les RH n'en entendent parler <em>que trop tard.</em></span>
+    </h2>
+    <p class="section-body" data-lang="en">Today's HR tools — annual surveys, exit interviews, EAP programs — are all reactive. By the time a nurse hands in their resignation, months of distress have already been missed. Quebec's health networks cannot afford to keep losing experienced staff this way.</p>
+    <p class="section-body" data-lang="fr">Les outils RH actuels — sondages annuels, entrevues de départ, PAE — sont tous réactifs. Au moment où une infirmière remet sa démission, des mois de détresse ont déjà été ignorés. Les réseaux de santé du Québec ne peuvent plus se permettre de perdre ainsi leur personnel expérimenté.</p>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section class="solution">
+  <div class="section-tag" data-lang="en">Our Solution</div>
+  <div class="section-tag" data-lang="fr">Notre solution</div>
+  <h2 class="section-title">
+    <span data-lang="en">An early warning system built <em>for healthcare.</em></span>
+    <span data-lang="fr">Un système d'alerte précoce conçu <em>pour la santé.</em></span>
+  </h2>
+  <p class="section-body" data-lang="en">Sereva analyzes existing operational data to surface burnout risk before it becomes resignation. It gives HR teams the visibility to act early — and gives workers the feeling that someone is paying attention.</p>
+  <p class="section-body" data-lang="fr">Sereva analyse les données opérationnelles existantes pour détecter le risque d'épuisement avant qu'il ne devienne une démission. Il donne aux équipes RH la visibilité nécessaire pour agir tôt — et aux travailleurs le sentiment que quelqu'un les écoute.</p>
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon terra">📊</div>
+      <div class="feature-title" data-lang="en">HR Dashboard</div>
+      <div class="feature-title" data-lang="fr">Tableau de bord RH</div>
+      <p class="feature-desc" data-lang="en">Real-time burnout risk scores by team, department, and shift — built on data you already collect.</p>
+      <p class="feature-desc" data-lang="fr">Scores de risque d'épuisement en temps réel par équipe, département et quart de travail — basés sur les données que vous collectez déjà.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon sage">🌱</div>
+      <div class="feature-title" data-lang="en">Worker App</div>
+      <div class="feature-title" data-lang="fr">Application employé</div>
+      <p class="feature-desc" data-lang="en">A bilingual mobile app giving frontline staff career path visibility, wellbeing check-ins, and peer connection.</p>
+      <p class="feature-desc" data-lang="fr">Une application mobile bilingue offrant au personnel de première ligne une visibilité sur leur parcours de carrière, des bilans de bien-être et des connexions entre pairs.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon blush">⚡</div>
+      <div class="feature-title" data-lang="en">Intervention Engine</div>
+      <div class="feature-title" data-lang="fr">Moteur d'intervention</div>
+      <p class="feature-desc" data-lang="en">Targeted recommendations — scheduling adjustments, recognition prompts, development conversations — matched to each risk profile.</p>
+      <p class="feature-desc" data-lang="fr">Recommandations ciblées — ajustements d'horaires, rappels de reconnaissance, conversations de développement — adaptées à chaque profil de risque.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHO -->
+<section class="who">
+  <div>
+    <div class="section-tag" data-lang="en">Who We Serve</div>
+    <div class="section-tag" data-lang="fr">À qui nous nous adressons</div>
+    <h2 class="section-title">
+      <span data-lang="en">Built for the people who <em>keep the system running.</em></span>
+      <span data-lang="fr">Conçu pour ceux qui <em>font tourner le système.</em></span>
+    </h2>
+    <p class="section-body" data-lang="en">Sereva serves both the workers on the front lines and the HR leaders responsible for keeping them. We operate within Quebec's CIUSSS and CISSS networks — where the need is most urgent and the impact greatest.</p>
+    <p class="section-body" data-lang="fr">Sereva sert à la fois les travailleurs en première ligne et les responsables RH chargés de les soutenir. Nous opérons au sein des réseaux CIUSSS et CISSS du Québec — là où le besoin est le plus urgent et l'impact le plus grand.</p>
+  </div>
+  <div class="persona-cards">
+    <div class="persona">
+      <div class="persona-avatar" style="background:rgba(201,123,90,0.1)">👩‍⚕️</div>
+      <div>
+        <div class="persona-name" data-lang="en">Marie, RN — Night Shift ICU</div>
+        <div class="persona-name" data-lang="fr">Marie, inf. — USI de nuit</div>
+        <div class="persona-role" data-lang="en">Frontline nurse, 6 years experience, no visibility into her career path</div>
+        <div class="persona-role" data-lang="fr">Infirmière de première ligne, 6 ans d'expérience, sans visibilité sur sa carrière</div>
+      </div>
+    </div>
+    <div class="persona">
+      <div class="persona-avatar" style="background:rgba(122,158,135,0.1)">🧑‍💼</div>
+      <div>
+        <div class="persona-name" data-lang="en">David, HR Director — CIUSSS</div>
+        <div class="persona-name" data-lang="fr">David, DRH — CIUSSS</div>
+        <div class="persona-role" data-lang="en">Accountable for retention, but has no early warning system for burnout</div>
+        <div class="persona-role" data-lang="fr">Responsable de la rétention, mais sans système d'alerte précoce pour l'épuisement</div>
+      </div>
+    </div>
+    <div class="persona">
+      <div class="persona-avatar" style="background:rgba(242,228,216,0.9)">🧑‍🔬</div>
+      <div>
+        <div class="persona-name" data-lang="en">Aïcha, PAB — Long-term Care</div>
+        <div class="persona-name" data-lang="fr">Aïcha, PAB — Soins de longue durée</div>
+        <div class="persona-role" data-lang="en">Orderly, immigrant worker, underserved by current HR tools</div>
+        <div class="persona-role" data-lang="fr">Préposée, travailleuse immigrante, mal desservie par les outils RH actuels</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MISSION -->
+<section class="mission">
+  <p class="mission-quote">
+    <span data-lang="en">"Burnout in healthcare is predictable before it becomes irreversible. Sereva exists to close that gap."</span>
+    <span data-lang="fr">« L'épuisement professionnel en santé est prévisible avant de devenir irréversible. Sereva existe pour combler cet écart. »</span>
+  </p>
+  <p class="mission-sub">
+    <span data-lang-inline="en">Contributing to UN SDGs 3 · 8 · 10 — Good Health, Decent Work, Reduced Inequalities</span>
+    <span data-lang-inline="fr">Contribuant aux ODD de l'ONU 3 · 8 · 10 — Bonne santé, Travail décent, Inégalités réduites</span>
+  </p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Ser<span>e</span>va</div>
+  <div class="footer-copy">© 2026 Sereva. All rights reserved. Montreal, Quebec.</div>
+  <div class="footer-sdg">
+    <span data-lang-inline="en">Early-stage startup · Supported by District 3, Concordia</span>
+    <span data-lang-inline="fr">Startup en démarrage · Soutenue par District 3, Concordia</span>
+  </div>
+</footer>
+
+<script>
+  function setLang(lang) {
+    document.body.className = 'lang-' + lang;
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
+    });
+  }
+</script>
+</body>
+</html>
